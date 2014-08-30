@@ -4,7 +4,7 @@ defmodule Tty2048.Mixfile do
   def project do
     [app: :tty2048,
      version: "0.0.1",
-     elixir: "~> 0.13.2",
+     elixir: "~> 0.15.1",
      deps: deps]
   end
 
