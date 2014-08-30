@@ -11,7 +11,7 @@ defmodule Tty2048.GridTest do
   end
 
   test "move left", context do
-    assert Tty2048.Grid.move(context[:grid], :left) == [
+    assert Tty2048.Grid.move_left(context[:grid]) == [
       [4, 4, 0, 0],
       [4, 8, 0, 0],
       [4, 2, 0, 0],
@@ -20,7 +20,7 @@ defmodule Tty2048.GridTest do
   end
 
   test "move right", context do
-    assert Tty2048.Grid.move(context[:grid], :right) == [
+    assert Tty2048.Grid.move_right(context[:grid]) == [
       [0, 0, 4, 4],
       [0, 0, 4, 8],
       [0, 0, 2, 4],
@@ -29,7 +29,7 @@ defmodule Tty2048.GridTest do
   end
 
   test "move up", context do
-    assert Tty2048.Grid.move(context[:grid], :up) == [
+    assert Tty2048.Grid.move_up(context[:grid]) == [
       [4, 4, 2, 2],
       [4, 0, 4, 4],
       [0, 0, 2, 4],
@@ -38,7 +38,7 @@ defmodule Tty2048.GridTest do
   end
 
   test "move down", context do
-    assert Tty2048.Grid.move(context[:grid], :down) == [
+    assert Tty2048.Grid.move_down(context[:grid]) == [
       [0, 0, 0, 0],
       [0, 0, 2, 2],
       [4, 0, 4, 4],
