@@ -1,4 +1,8 @@
 defmodule Tty2048.Grid do
+  def make(size) do
+    for _ <- 1..size, do: make_row(size)
+  end
+
   def move(grid, :left) do
     Enum.map collapse(grid), fn
       {acc, tail} -> Enum.reverse(acc, tail)
@@ -17,6 +21,10 @@ defmodule Tty2048.Grid do
 
   def move(grid, :down) do
     transpose(grid) |> move(:right) |> transpose
+  end
+
+  defp make_row(size) do
+    for _ <- 1..size, do: 0
   end
 
   defp transpose(grid) do
