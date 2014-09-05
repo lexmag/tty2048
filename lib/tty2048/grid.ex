@@ -1,25 +1,27 @@
 defmodule Tty2048.Grid do
-  def move_left(grid) do
+  def move(grid, :left) do
     Enum.map collapse(grid), fn
       {acc, tail} -> Enum.reverse(acc, tail)
     end
   end
 
-  def move_right(grid) do
+  def move(grid, :right) do
     Enum.map(grid, &Enum.reverse/1) |> collapse |> Enum.map fn
       {acc, tail} -> tail ++ acc
     end
   end
 
-  def move_up(grid) do
-    transpose(grid) |> move_left |> transpose
+  def move(grid, :up) do
+    transpose(grid) |> move(:left) |> transpose
   end
 
-  def move_down(grid) do
-    transpose(grid) |> move_right |> transpose
+  def move(grid, :down) do
+    transpose(grid) |> move(:right) |> transpose
   end
 
-  defp transpose(grid, acc \\ [])
+  defp transpose(grid) do
+    transpose(grid, [])
+  end
 
   defp transpose([[]|_], acc) do
     Enum.reverse(acc)
