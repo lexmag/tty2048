@@ -27,9 +27,7 @@ defmodule Tty2048.Grid do
     for _ <- 1..size, do: 0
   end
 
-  defp transpose(grid) do
-    transpose(grid, [])
-  end
+  defp transpose(grid, acc \\ [])
 
   defp transpose([[]|_], acc) do
     Enum.reverse(acc)
