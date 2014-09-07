@@ -12,9 +12,17 @@ defmodule Tty2048.Grid.Formatter do
 
   defp format_cell(0), do: @empty_cell
   defp format_cell(num) do
-    Integer.to_string(num)
+    integer_to_string(num)
     |> String.rjust(4)
     |> format_cell(num)
+  end
+
+  defp integer_to_string(num) when num < 1000 do
+    Integer.to_string(num)
+  end
+
+  defp integer_to_string(num) do
+    Integer.to_string(div(num, 1000)) <> "k"
   end
 
   defp format_cell(data, num) do
