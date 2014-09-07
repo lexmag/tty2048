@@ -3,6 +3,8 @@ defmodule Tty2048.Grid do
     for _ <- 1..size, do: make_row(size)
   end
 
+  defdelegate format(grid), to: __MODULE__.Formatter
+
   def move(grid, :left) do
     Enum.map collapse(grid), fn
       {acc, tail} -> Enum.reverse(acc, tail)
