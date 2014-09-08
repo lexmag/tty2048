@@ -19,12 +19,12 @@ defmodule Tty2048.Grid.FormatterTest do
     [[720]]    => "\e[37m 720",
     [[2500]]   => "\e[37m  2k",
     [[4096]]   => "\e[37m  4k",
-    [[1], [1]] => "\e[37m   1\n\e[37m   1"
+    [[1], [1]] => "\e[37m   1\r\n\e[37m   1"
   }
 
   for {grid, output} <- cases do
     test "format #{inspect grid}" do
-      assert IO.iodata_to_binary(format(unquote(grid))) == <<"\e[H\e[2J", unquote(output), "\n\e[0m">>
+      assert IO.iodata_to_binary(format(unquote(grid))) == <<"\e[H\e[2J", unquote(output), "\r\n\e[0m">>
     end
   end
 end
