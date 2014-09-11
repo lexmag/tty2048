@@ -1,21 +1,28 @@
 defmodule Tty2048.Game do
   use GenServer
 
-  def start_link do
-    GenServer.start_link(__MODULE__, nil, [name: :game])
+  alias Tty2048.Grid
+
+  def start_link(size) do
+    GenServer.start_link(__MODULE__, size, [name: :game])
   end
 
-  def init(nil) do
-    {:ok, Tty2048.Grid.make(4)}
+  def init(size) do
+    {:ok, Grid.make(size), 0}
   end
 
   def move(direction) do
-    GenServer.call(:game, {:move, direction})
+    GenServer.cast(:game, {:move, direction})
   end
 
-  def handle_call({:move, direction}, _from, grid) do
-    grid = Tty2048.Grid.move(grid, direction)
+  def handle_cast({:move, direction}, grid) do
+    {:noreply, Grid.move(grid, direction), 0}
+  end
 
-    {:reply, grid, grid}
+  def handle_info(:timeout, grid) do
+    Grid.format(grid)
+    |> IO.write
+
+    {:noreply, grid}
   end
 end
