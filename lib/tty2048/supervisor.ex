@@ -2,13 +2,13 @@ defmodule Tty2048.Supervisor do
   use Supervisor
 
   def start_link do
-    :supervisor.start_link(__MODULE__, [])
+    Supervisor.start_link(__MODULE__, nil)
   end
 
-  def init([]) do
+  def init(nil) do
     children = [
-      # Define workers and child supervisors to be supervised
-      # worker(Tty2048.Worker, [arg1, arg2, arg3])
+      worker(Tty2048.Game, [4]),
+      worker(Tty2048.Driver, [])
     ]
     supervise(children, strategy: :one_for_one)
   end
