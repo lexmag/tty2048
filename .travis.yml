@@ -14,4 +14,4 @@ before_install:
 before_script:
   - export PATH=$PWD/elixir/bin:$PATH
 
-script: mix test --trace
+script: mix test --trace --no-start
