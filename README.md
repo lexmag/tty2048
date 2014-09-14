@@ -17,3 +17,7 @@ Then clone the repository.
 ```
 
 Please note that this is still work in progress.
+
+## License
+
+This software is licensed under [the ISC license](LICENSE).
