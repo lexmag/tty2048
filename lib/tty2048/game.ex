@@ -16,7 +16,7 @@ defmodule Tty2048.Game do
   end
 
   def handle_cast({:move, direction}, grid) do
-    {:noreply, Grid.move(grid, direction), 0}
+    {:noreply, Grid.move({direction, grid}), 0}
   end
 
   def handle_info(:timeout, grid) do
