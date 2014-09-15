@@ -4,14 +4,17 @@ defmodule Tty2048.GridTest do
   alias Tty2048.Grid
 
   setup_all do
-    :random.seed(1374, 347975, 449264) # make tests deterministic
-
     {:ok, grid: [
       [4, 0, 2, 2],
       [2, 2, 4, 4],
       [2, 0, 2, 2],
       [0, 2, 0, 2]
     ]}
+  end
+
+  setup do
+    :random.seed(1374, 347975, 449264) # make tests deterministic
+    :ok
   end
 
   test "creation" do
@@ -26,7 +29,7 @@ defmodule Tty2048.GridTest do
     assert Grid.move({:left, ctx[:grid]}) == [
       [4, 4, 0, 0],
       [4, 8, 0, 0],
-      [4, 2, 0, 2],
+      [4, 2, 2, 0],
       [4, 0, 0, 0]
     ]
   end
@@ -35,7 +38,7 @@ defmodule Tty2048.GridTest do
     assert Grid.move({:right, ctx[:grid]}) == [
       [0, 0, 4, 4],
       [0, 0, 4, 8],
-      [0, 2, 2, 4],
+      [2, 0, 2, 4],
       [0, 0, 0, 4]
     ]
   end
