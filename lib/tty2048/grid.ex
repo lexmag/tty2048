@@ -78,7 +78,9 @@ defmodule Tty2048.Grid do
     merge(rest, [el|acc], tail)
   end
 
-  defp seed(grid), do: seed(2, grid)
+  defp seed(grid) do
+    seed((if :random.uniform < 0.9, do: 2, else: 4), grid)
+  end
 
   defp seed(num, grid) do
     take_empties(grid)

@@ -13,12 +13,13 @@ defmodule Tty2048.GridTest do
   end
 
   setup do
-    :random.seed(1374, 347975, 449264) # make tests deterministic
+    :random.seed(23242, 27726, 24113) # make tests deterministic
     :ok
   end
 
   test "creation" do
-    assert Grid.make(2) == [[0, 0], [2, 0]]
+    assert Grid.make(2) == [[0, 2], [0, 0]]
+    assert Grid.make(2) == [[0, 4], [0, 0]]
   end
 
   test "formatting", ctx do
