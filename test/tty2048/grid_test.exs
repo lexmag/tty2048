@@ -27,38 +27,38 @@ defmodule Tty2048.GridTest do
   end
 
   test "move left", ctx do
-    assert Grid.move({:left, ctx[:grid]}) == [
-      [4, 4, 0, 0],
-      [4, 8, 0, 0],
-      [4, 2, 2, 0],
-      [4, 0, 0, 0]
-    ]
+    assert Grid.move({:left, ctx[:grid]}) == {
+      [[4, 4, 0, 0],
+       [4, 8, 0, 0],
+       [4, 2, 2, 0],
+       [4, 0, 0, 0]], 24
+    }
   end
 
   test "move right", ctx do
-    assert Grid.move({:right, ctx[:grid]}) == [
-      [0, 0, 4, 4],
-      [0, 0, 4, 8],
-      [2, 0, 2, 4],
-      [0, 0, 0, 4]
-    ]
+    assert Grid.move({:right, ctx[:grid]}) == {
+      [[0, 0, 4, 4],
+       [0, 0, 4, 8],
+       [2, 0, 2, 4],
+       [0, 0, 0, 4]], 24
+    }
   end
 
   test "move up", ctx do
-    assert Grid.move({:up, ctx[:grid]}) == [
-      [4, 4, 2, 2],
-      [4, 0, 4, 4],
-      [0, 0, 2, 4],
-      [2, 0, 0, 0]
-    ]
+    assert Grid.move({:up, ctx[:grid]}) == {
+      [[4, 4, 2, 2],
+       [4, 0, 4, 4],
+       [0, 0, 2, 4],
+       [2, 0, 0, 0]], 12
+    }
   end
 
   test "move down", ctx do
-    assert Grid.move({:down, ctx[:grid]}) == [
-      [0, 0, 0, 2],
-      [0, 0, 2, 2],
-      [4, 0, 4, 4],
-      [4, 4, 2, 4]
-    ]
+    assert Grid.move({:down, ctx[:grid]}) == {
+      [[0, 0, 0, 2],
+       [0, 0, 2, 2],
+       [4, 0, 4, 4],
+       [4, 4, 2, 4]], 12
+    }
   end
 end

@@ -11,14 +11,14 @@ defmodule Tty2048.Grid do
   end
 
   defp move(grid, :left) do
-    for {acc, tail} <- collapse(grid) do
-      Enum.reverse(acc, tail)
+    collapse(grid) |> Enum.map_reduce 0, fn
+      {acc, tail, score}, sum -> {Enum.reverse(acc, tail), sum + score}
     end
   end
 
   defp move(grid, :right) do
-    Enum.map(grid, &Enum.reverse/1) |> collapse |> Enum.map fn
-      {acc, tail} -> tail ++ acc
+    Enum.map(grid, &Enum.reverse/1) |> collapse |> Enum.map_reduce 0, fn
+      {acc, tail, score}, sum -> {tail ++ acc, sum + score}
     end
   end
 
@@ -37,6 +37,8 @@ defmodule Tty2048.Grid do
   defp make_row(size) do
     for _ <- 1..size, do: 0
   end
+
+  defp transpose({grid, score}), do: {transpose(grid), score}
 
   defp transpose(grid, acc \\ [])
 
@@ -57,26 +59,31 @@ defmodule Tty2048.Grid do
   end
 
   defp collapse([], acc, tail) do
-    Enum.reverse(acc) |> merge([], tail)
+    Enum.reverse(acc)
+    |> merge([], tail, 0)
   end
 
-  defp collapse([0|rest], acc, tail) do
-    collapse(rest, acc, [0|tail])
+  defp collapse([0 | rest], acc, tail) do
+    collapse(rest, acc, [0 | tail])
   end
 
-  defp collapse([el|rest], acc, tail) do
-    collapse(rest, [el|acc], tail)
+  defp collapse([el | rest], acc, tail) do
+    collapse(rest, [el | acc], tail)
   end
 
-  defp merge([], acc, tail), do: {acc, tail}
+  defp merge([], acc, tail, score), do: {acc, tail, score}
 
-  defp merge([el, el|rest], acc, tail) do
-    merge(rest, [el + el|acc], [0|tail])
+  defp merge([el, el | rest], acc, tail, score) do
+    points = el + el
+
+    merge(rest, [points | acc], [0 | tail], score + points)
   end
 
-  defp merge([el|rest], acc, tail) do
-    merge(rest, [el|acc], tail)
+  defp merge([el | rest], acc, tail, score) do
+    merge(rest, [el | acc], tail, score)
   end
+
+  defp seed({grid, score}), do: {seed(grid), score}
 
   defp seed(grid) do
     seed((if :random.uniform < 0.9, do: 2, else: 4), grid)

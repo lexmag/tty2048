@@ -8,21 +8,21 @@ defmodule Tty2048.Game do
   end
 
   def init(size) do
-    {:ok, Grid.make(size), 0}
+    {:ok, {Grid.make(size), 0}, 0}
   end
 
   def move(direction) do
     GenServer.cast(:game, {:move, direction})
   end
 
-  def handle_cast({:move, direction}, grid) do
+  def handle_cast({:move, direction}, {grid, _score}) do
     {:noreply, Grid.move({direction, grid}), 0}
   end
 
-  def handle_info(:timeout, grid) do
+  def handle_info(:timeout, {grid, _score} = state) do
     Grid.format(grid)
     |> IO.write
 
-    {:noreply, grid}
+    {:noreply, state}
   end
 end
