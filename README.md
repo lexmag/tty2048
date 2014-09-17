@@ -2,6 +2,8 @@
 
 [2048](http://gabrielecirulli.github.io/2048) game in a terminal.
 
+![Screenshot](./screenshot.png)
+
 ## Installation
 
 ```sh
