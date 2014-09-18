@@ -1,6 +1,7 @@
 defmodule Tty2048.Grid do
   def make(size) when size > 0 do
-    seed(for _ <- 1..size, do: make_row(size))
+    make_grid(size)
+    |> seed
   end
 
   defdelegate format(grid), to: __MODULE__.Formatter
@@ -11,15 +12,14 @@ defmodule Tty2048.Grid do
   end
 
   defp move(grid, :left) do
-    collapse(grid) |> Enum.map_reduce 0, fn
-      {acc, tail, score}, sum -> {Enum.reverse(acc, tail), sum + score}
-    end
+    collapse(grid)
+    |> compose(&Enum.reverse(&1, &2))
   end
 
   defp move(grid, :right) do
-    Enum.map(grid, &Enum.reverse/1) |> collapse |> Enum.map_reduce 0, fn
-      {acc, tail, score}, sum -> {tail ++ acc, sum + score}
-    end
+    Enum.map(grid, &Enum.reverse/1)
+    |> collapse
+    |> compose(&(&2 ++ &1))
   end
 
   defp move(grid, :up) do
@@ -34,17 +34,27 @@ defmodule Tty2048.Grid do
     |> transpose
   end
 
+  defp make_grid(size) do
+    for _ <- 1..size, do: make_row(size)
+  end
+
   defp make_row(size) do
     for _ <- 1..size, do: 0
   end
 
-  defp transpose({grid, score}), do: {transpose(grid), score}
+  defp compose(chunks, fun) do
+    Enum.map_reduce chunks, 0, fn
+      {acc, tail, points}, sum -> {fun.(acc, tail), sum + points}
+    end
+  end
+
+  defp transpose({grid, score}),
+    do: {transpose(grid), score}
 
   defp transpose(grid, acc \\ [])
 
-  defp transpose([[]|_], acc) do
-    Enum.reverse(acc)
-  end
+  defp transpose([[]|_], acc),
+    do: Enum.reverse(acc)
 
   defp transpose(grid, acc) do
     {tail, row} = Enum.map_reduce(grid, [], fn
@@ -71,22 +81,24 @@ defmodule Tty2048.Grid do
     collapse(rest, [el | acc], tail)
   end
 
-  defp merge([], acc, tail, score), do: {acc, tail, score}
+  defp merge([], acc, tail, points),
+    do: {acc, tail, points}
 
-  defp merge([el, el | rest], acc, tail, score) do
-    points = el + el
+  defp merge([el, el | rest], acc, tail, points) do
+    sum = el + el
 
-    merge(rest, [points | acc], [0 | tail], score + points)
+    merge(rest, [sum | acc], [0 | tail], points + sum)
   end
 
-  defp merge([el | rest], acc, tail, score) do
-    merge(rest, [el | acc], tail, score)
+  defp merge([el | rest], acc, tail, points) do
+    merge(rest, [el | acc], tail, points)
   end
 
-  defp seed({grid, score}), do: {seed(grid), score}
+  defp seed({grid, points}),
+    do: {seed(grid), points}
 
   defp seed(grid) do
-    seed((if :random.uniform < 0.9, do: 2, else: 4), grid)
+    seed(if(:random.uniform < 0.9, do: 2, else: 4), grid)
   end
 
   defp seed(num, grid) do
