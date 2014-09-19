@@ -23,16 +23,22 @@ defmodule Tty2048.Game do
     {:noreply, move(game, direction), 0}
   end
 
-  def handle_info(:timeout, %Game{grid: grid} = state) do
-    Grid.format(grid)
+  def handle_info(:timeout, %Game{} = game) do
+    format(game)
     |> IO.write
 
-    {:noreply, state}
+    {:noreply, game}
   end
 
   defp move(%{grid: grid, score: score}, direction) do
     {grid, points} = Grid.move({direction, grid})
 
     %Game{grid: grid, score: score + points}
+  end
+
+  defp format(%{grid: grid}) do
+    Grid.format(grid)
+    |> Enum.into([:home, :clear])
+    |> IO.ANSI.format
   end
 end

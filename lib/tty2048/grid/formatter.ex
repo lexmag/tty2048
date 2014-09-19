@@ -1,8 +1,7 @@
 defmodule Tty2048.Grid.Formatter do
   def format(grid) do
     Enum.map(grid, &[format_row(&1), "\r\n"])
-    |> Enum.into([:home, :clear])
-    |> IO.ANSI.format
+    |> IO.ANSI.format_fragment
   end
 
   defp format_row(row) do

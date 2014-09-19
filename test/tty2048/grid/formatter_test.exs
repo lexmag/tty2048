@@ -24,7 +24,7 @@ defmodule Tty2048.Grid.FormatterTest do
 
   for {grid, output} <- cases do
     test "format #{inspect grid}" do
-      assert IO.iodata_to_binary(format(unquote(grid))) == <<"\e[H\e[2J", unquote(output), "\r\n\e[0m">>
+      assert IO.iodata_to_binary(format(unquote(grid))) == <<unquote(output), "\r\n">>
     end
   end
 end
