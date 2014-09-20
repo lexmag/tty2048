@@ -7,7 +7,7 @@ defmodule Tty2048.Supervisor do
 
   def init(nil) do
     children = [
-      worker(Tty2048.Game, [4]),
+      worker(Tty2048.Game, [Tty2048.Game.new(4)]),
       worker(Tty2048.Driver, [])
     ]
     supervise(children, strategy: :one_for_one)
