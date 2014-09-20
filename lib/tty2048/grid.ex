@@ -6,7 +6,7 @@ defmodule Tty2048.Grid do
 
   defdelegate format(grid), to: __MODULE__.Formatter
 
-  def move({direction, grid}) do
+  def move({direction, grid}) when is_list(grid) do
     move(grid, direction)
     |> seed
   end
