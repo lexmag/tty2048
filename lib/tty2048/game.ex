@@ -37,8 +37,6 @@ defmodule Tty2048.Game do
   end
 
   defp format(%{grid: grid}) do
-    Grid.format(grid)
-    |> Enum.into([:home, :clear])
-    |> IO.ANSI.format
+    [IO.ANSI.home, IO.ANSI.clear, Grid.format(grid), IO.ANSI.reset]
   end
 end
