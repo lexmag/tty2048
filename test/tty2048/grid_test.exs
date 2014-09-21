@@ -18,8 +18,8 @@ defmodule Tty2048.GridTest do
   end
 
   test "creation" do
-    assert Grid.make(2) == [[0, 2], [0, 0]]
-    assert Grid.make(2) == [[0, 4], [0, 0]]
+    assert Grid.new(2) == [[0, 2], [0, 0]]
+    assert Grid.new(2) == [[0, 4], [0, 0]]
   end
 
   test "formatting", ctx do

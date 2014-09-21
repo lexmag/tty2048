@@ -1,5 +1,5 @@
 defmodule Tty2048.Grid do
-  def make(size) when size > 0 do
+  def new(size) when size > 0 do
     make_grid(size)
     |> seed
   end

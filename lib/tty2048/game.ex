@@ -6,7 +6,7 @@ defmodule Tty2048.Game do
   alias Tty2048.Grid
 
   def new(size),
-    do: %__MODULE__{grid: Grid.make(size)}
+    do: %__MODULE__{grid: Grid.new(size)}
 
   def start_link(state) do
     GenServer.start_link(__MODULE__, state, [name: :game])
