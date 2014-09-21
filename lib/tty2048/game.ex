@@ -25,7 +25,7 @@ defmodule Tty2048.Game do
   end
 
   def handle_info(:timeout, %__MODULE__{} = state) do
-    format(state)
+    __MODULE__.Formatter.format(state)
     |> IO.write
 
     {:noreply, state}
@@ -35,9 +35,5 @@ defmodule Tty2048.Game do
     {grid, points} = Grid.move({direction, grid})
 
     %__MODULE__{grid: grid, score: score + points}
-  end
-
-  defp format(%{grid: grid}) do
-    [IO.ANSI.home, IO.ANSI.clear, Grid.format(grid), IO.ANSI.reset]
   end
 end

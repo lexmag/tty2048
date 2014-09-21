@@ -5,12 +5,22 @@ defmodule Tty2048.GameTest do
 
   import ExUnit.CaptureIO
 
+  defp make_game(grid, score) do
+    %Game{grid: grid, score: score}
+  end
+
   defp capture_game_io(grid, action) do
     capture_io fn ->
-      {:ok, _} = Game.start_link(%Game{grid: grid})
+      {:ok, _} = Game.start_link(make_game(grid, 1))
       action.()
       :timer.sleep(10)
     end
+  end
+
+  defp game_to_binary(grid, score) do
+    make_game(grid, score)
+    |> Tty2048.Game.Formatter.format
+    |> IO.iodata_to_binary
   end
 
   setup do
@@ -23,7 +33,7 @@ defmodule Tty2048.GameTest do
       :timer.sleep(10)
     end
 
-    assert output == "\e[H\e[2J\e[33m   4\e[33m   4\r\n\e[0m"
+    assert output == game_to_binary([[4, 4]], 1)
   end
 
   test "move left" do
@@ -31,7 +41,7 @@ defmodule Tty2048.GameTest do
       Game.move(:left)
     end
 
-    assert output == "\e[H\e[2J\e[33m   4\e[32m   2\r\n\e[0m"
+    assert output == game_to_binary([[4, 2]], 5)
   end
 
   test "move right" do
@@ -39,7 +49,7 @@ defmodule Tty2048.GameTest do
       Game.move(:right)
     end
 
-    assert output == "\e[H\e[2J\e[32m   2\e[33m   4\r\n\e[0m"
+    assert output == game_to_binary([[2, 4]], 5)
   end
 
   test "move up" do
@@ -47,7 +57,7 @@ defmodule Tty2048.GameTest do
       Game.move(:up)
     end
 
-    assert output == "\e[H\e[2J\e[33m   4\r\n\e[32m   2\r\n\e[0m"
+    assert output == game_to_binary([[4], [2]], 5)
   end
 
   test "move down" do
@@ -55,6 +65,6 @@ defmodule Tty2048.GameTest do
       Game.move(:down)
     end
 
-    assert output == "\e[H\e[2J\e[32m   2\r\n\e[33m   4\r\n\e[0m"
+    assert output == game_to_binary([[2], [4]], 5)
   end
 end
