@@ -7,7 +7,7 @@
 ## Installation
 
 ```sh
-brew install elixir
+$ brew install elixir
 ```
 
 Then clone the repository.
@@ -15,7 +15,7 @@ Then clone the repository.
 ## Starting
 
 ```sh
-./bin/tty2048
+$ ./bin/tty2048
 ```
 
 Please note that this is still work in progress.
