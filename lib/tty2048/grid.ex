@@ -112,20 +112,7 @@ defmodule Tty2048.Grid do
   end
 
   defp insert_at({row_index, index}, num, grid) do
-    Stream.with_index(grid) |> Enum.map fn
-      {row, i} when i == row_index ->
-        insert_at(index, num, row)
-
-      {row, _i} -> row
-    end
-  end
-
-  defp insert_at(index, num, row) do
-    Stream.with_index(row) |> Enum.map fn
-      {_cell, i} when i == index -> num
-
-      {cell, _i} -> cell
-    end
+    List.update_at(grid, row_index, &List.replace_at(&1, index, num))
   end
 
   defp take_empties(grid) do
