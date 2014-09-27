@@ -61,4 +61,10 @@ defmodule Tty2048.GridTest do
        [4, 4, 2, 4]], 12
     }
   end
+
+  test "make no move" do
+    grid = [[0, 0], [2, 4]]
+
+    assert Grid.move({:left, grid}) == {grid, 0}
+  end
 end

@@ -7,8 +7,10 @@ defmodule Tty2048.Grid do
   defdelegate format(grid), to: __MODULE__.Formatter
 
   def move({direction, grid}) when is_list(grid) do
-    move(grid, direction)
-    |> seed
+    case move(grid, direction) do
+      {^grid, _}     -> {grid, 0}
+      {grid, points} -> {seed(grid), points}
+    end
   end
 
   defp move(grid, :left) do
@@ -48,8 +50,8 @@ defmodule Tty2048.Grid do
     end
   end
 
-  defp transpose({grid, score}),
-    do: {transpose(grid), score}
+  defp transpose({grid, points}),
+    do: {transpose(grid), points}
 
   defp transpose(grid, acc \\ [])
 
@@ -93,9 +95,6 @@ defmodule Tty2048.Grid do
   defp merge([el | rest], acc, tail, points) do
     merge(rest, [el | acc], tail, points)
   end
-
-  defp seed({grid, points}),
-    do: {seed(grid), points}
 
   defp seed(grid) do
     seed(if(:random.uniform < 0.9, do: 2, else: 4), grid)
