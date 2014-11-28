@@ -6,7 +6,7 @@ defmodule Tty2048.Driver do
   end
 
   def init(nil) do
-    {:ok, Port.open({:spawn, 'tty_sl -c -e'}, [:eof])}
+    {:ok, Port.open({:spawn, "tty_sl -c -e"}, [:binary, :eof])}
   end
 
   def handle_info({pid, {:data, data}}, pid) do
@@ -17,9 +17,9 @@ defmodule Tty2048.Driver do
     {:noreply, pid}
   end
 
-  defp translate('\e[A'), do: :up
-  defp translate('\e[B'), do: :down
-  defp translate('\e[C'), do: :right
-  defp translate('\e[D'), do: :left
+  defp translate("\e[A"), do: :up
+  defp translate("\e[B"), do: :down
+  defp translate("\e[C"), do: :right
+  defp translate("\e[D"), do: :left
   defp translate(_data),  do: nil
 end
