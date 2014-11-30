@@ -19,12 +19,12 @@ defmodule Tty2048.GameTest do
 
   defp game_to_binary(grid, score) do
     make_game(grid, score)
-    |> Tty2048.Game.Formatter.format
+    |> Game.Formatter.format
     |> IO.iodata_to_binary
   end
 
-  setup do
-    :random.seed(23242, 27726, 24113) # make tests deterministic
+  setup do # make tests deterministic
+    {:ok, _} = Tty2048.Random.start_link({23242, 27726, 24113})
     :ok
   end
 

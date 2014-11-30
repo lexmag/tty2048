@@ -12,8 +12,8 @@ defmodule Tty2048.GridTest do
     ]}
   end
 
-  setup do
-    :random.seed(23242, 27726, 24113) # make tests deterministic
+  setup do # make tests deterministic
+    {:ok, _} = Tty2048.Random.start_link({23242, 27726, 24113})
     :ok
   end
 
@@ -23,7 +23,7 @@ defmodule Tty2048.GridTest do
   end
 
   test "formatting", ctx do
-    assert Grid.format(ctx[:grid]) == Tty2048.Grid.Formatter.format(ctx[:grid])
+    assert Grid.format(ctx[:grid]) == Grid.Formatter.format(ctx[:grid])
   end
 
   test "move left", ctx do

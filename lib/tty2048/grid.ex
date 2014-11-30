@@ -1,10 +1,12 @@
 defmodule Tty2048.Grid do
+  import Tty2048.Random
+
+  defdelegate format(grid), to: __MODULE__.Formatter
+
   def new(size) when size > 0 do
     make_grid(size)
     |> seed |> seed
   end
-
-  defdelegate format(grid), to: __MODULE__.Formatter
 
   def move({direction, grid}) when is_list(grid) do
     case move(grid, direction) do
@@ -55,15 +57,15 @@ defmodule Tty2048.Grid do
 
   defp transpose(grid, acc \\ [])
 
-  defp transpose([[]|_], acc),
+  defp transpose([[] | _], acc),
     do: Enum.reverse(acc)
 
   defp transpose(grid, acc) do
     {tail, row} = Enum.map_reduce(grid, [], fn
-      [el|rest], row -> {rest, [el|row]}
+      [el | rest], row -> {rest, [el | row]}
     end)
 
-    transpose(tail, [Enum.reverse(row)|acc])
+    transpose(tail, [Enum.reverse(row) | acc])
   end
 
   defp collapse(grid) do
@@ -97,7 +99,7 @@ defmodule Tty2048.Grid do
   end
 
   defp seed(grid) do
-    seed(if(:random.uniform < 0.9, do: 2, else: 4), grid)
+    seed(if(random < 0.9, do: 2, else: 4), grid)
   end
 
   defp seed(num, grid) do
@@ -107,7 +109,7 @@ defmodule Tty2048.Grid do
   end
 
   defp sample({count, empties}) do
-    Enum.at(empties, :random.uniform(count) - 1)
+    Enum.at(empties, random(count) - 1)
   end
 
   defp insert_at({row_index, index}, num, grid) do
