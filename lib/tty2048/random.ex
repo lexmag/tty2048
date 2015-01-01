@@ -1,10 +1,7 @@
 defmodule Tty2048.Random do
   use GenServer
 
-  def start_link do
-    <<n1::32, n2::32, n3::32>> = :crypto.rand_bytes(12)
-    start_link({n1, n2, n3})
-  end
+  def start_link, do: start_link(:os.timestamp)
 
   def start_link(seed) do
     GenServer.start_link(__MODULE__, seed, [name: __MODULE__])
