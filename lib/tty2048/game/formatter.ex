@@ -11,6 +11,6 @@ defmodule Tty2048.Game.Formatter do
   end
 
   defp format_grid(%{grid: grid}) do
-    Tty2048.Grid.format(grid)
+    Tty2048.Grid.Formatter.format(grid)
   end
 end

@@ -1,8 +1,6 @@
 defmodule Tty2048.Grid do
   import Tty2048.Random
 
-  defdelegate format(grid), to: __MODULE__.Formatter
-
   def new(size) when size > 0 do
     make_grid(size)
     |> seed |> seed

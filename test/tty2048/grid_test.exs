@@ -22,10 +22,6 @@ defmodule Tty2048.GridTest do
     assert Grid.new(2) == [[0, 2], [0, 2]]
   end
 
-  test "formatting", ctx do
-    assert Grid.format(ctx[:grid]) == Grid.Formatter.format(ctx[:grid])
-  end
-
   test "move left", ctx do
     assert Grid.move({:left, ctx[:grid]}) == {
       [[4, 4, 0, 0],
