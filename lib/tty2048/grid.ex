@@ -1,6 +1,4 @@
 defmodule Tty2048.Grid do
-  import Tty2048.Random
-
   def new(size) when size > 0 do
     make_grid(size)
     |> seed |> seed
@@ -97,7 +95,7 @@ defmodule Tty2048.Grid do
   end
 
   defp seed(grid) do
-    seed(if(random < 0.9, do: 2, else: 4), grid)
+    seed(if(:random.uniform < 0.9, do: 2, else: 4), grid)
   end
 
   defp seed(num, grid) do
@@ -107,7 +105,7 @@ defmodule Tty2048.Grid do
   end
 
   defp sample({count, empties}) do
-    Enum.at(empties, random(count) - 1)
+    Enum.at(empties, :random.uniform(count) - 1)
   end
 
   defp insert_at({row_index, index}, num, grid) do

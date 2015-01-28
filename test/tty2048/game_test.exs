@@ -3,68 +3,56 @@ defmodule Tty2048.GameTest do
 
   alias Tty2048.Game
 
-  import ExUnit.CaptureIO
+  defmodule Watcher do
+    use GenEvent
 
-  defp make_game(grid, score) do
-    %Game{grid: grid, score: score}
-  end
+    def start_link(test) do
+      Game.Watcher.start_link(__MODULE__, test)
+    end
 
-  defp capture_game_io(grid, action) do
-    capture_io fn ->
-      {:ok, _} = Game.start_link(make_game(grid, 1))
-      action.()
-      :timer.sleep(10)
+    def init({_game, test}),
+      do: {:ok, test}
+
+    def handle_event(%Game{} = game, test) do
+      send(test, game)
+      {:ok, test}
     end
   end
 
-  defp game_to_binary(grid, score) do
-    make_game(grid, score)
-    |> Game.Formatter.format
-    |> IO.iodata_to_binary
-  end
-
-  setup do # make tests deterministic
-    {:ok, _} = Tty2048.Random.start_link({23242, 27726, 24113})
-    :ok
-  end
-
-  test "creation" do
-    output = capture_game_io [[4, 4]], fn ->
-      :timer.sleep(10)
-    end
-
-    assert output == game_to_binary([[4, 4]], 1)
+  defp watch_game(game) do
+    {:ok, _} = Game.start_link(%{game | score: 1})
+    {:ok, _} = Watcher.start_link(self)
   end
 
   test "move left" do
-    output = capture_game_io [[2, 2]], fn ->
-      Game.move(:left)
-    end
+    watch_game(%Game{grid: [[2, 2]]})
 
-    assert output == game_to_binary([[4, 2]], 5)
+    Game.move(:left)
+
+    assert_receive %Game{grid: [[4, _]], score: 5}
   end
 
   test "move right" do
-    output = capture_game_io [[2, 2]], fn ->
-      Game.move(:right)
-    end
+    watch_game(%Game{grid: [[2, 2]]})
 
-    assert output == game_to_binary([[2, 4]], 5)
+    Game.move(:right)
+
+    assert_receive %Game{grid: [[_, 4]], score: 5}
   end
 
   test "move up" do
-    output = capture_game_io [[2], [2]], fn ->
-      Game.move(:up)
-    end
+    watch_game(%Game{grid: [[2], [2]]})
 
-    assert output == game_to_binary([[4], [2]], 5)
+    Game.move(:up)
+
+    assert_receive %Game{grid: [[4], [_]], score: 5}
   end
 
   test "move down" do
-    output = capture_game_io [[2], [2]], fn ->
-      Game.move(:down)
-    end
+    watch_game(%Game{grid: [[2], [2]]})
 
-    assert output == game_to_binary([[2], [4]], 5)
+    Game.move(:down)
+
+    assert_receive %Game{grid: [[_], [4]], score: 5}
   end
 end

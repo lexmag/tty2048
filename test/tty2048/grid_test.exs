@@ -13,7 +13,7 @@ defmodule Tty2048.GridTest do
   end
 
   setup do # make tests deterministic
-    {:ok, _} = Tty2048.Random.start_link({23242, 27726, 24113})
+    :random.seed(23242, 27726, 24113)
     :ok
   end
 
