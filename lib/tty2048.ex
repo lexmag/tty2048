@@ -6,7 +6,7 @@ defmodule Tty2048 do
 
     children =
       [worker(Tty2048.Game, [4]),
-       worker(Tty2048.Game.Watcher, [Tty2048.Driver])]
+       worker(Tty2048.Game.Watcher, [Tty2048.IO])]
 
     Supervisor.start_link(children, strategy: :rest_for_one)
   end

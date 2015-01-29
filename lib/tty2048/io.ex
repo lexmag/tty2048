@@ -1,4 +1,4 @@
-defmodule Tty2048.Driver do
+defmodule Tty2048.IO do
   use GenEvent
 
   alias Tty2048.Game
