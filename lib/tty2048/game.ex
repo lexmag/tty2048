@@ -31,7 +31,7 @@ defmodule Tty2048.Game do
     game = move(game, direction)
     GenEvent.notify(manager, game)
 
-    {:noreply, {manager, game}, 0}
+    {:noreply, {manager, game}}
   end
 
   defp new(%__MODULE__{} = state), do: state
