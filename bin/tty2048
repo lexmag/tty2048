@@ -1,2 +1,0 @@
-#!/bin/sh
-elixir --erl -noinput -S mix run --no-halt
