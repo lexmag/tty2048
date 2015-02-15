@@ -4,21 +4,19 @@
 
 ![Screenshot](./screenshot.png)
 
-## Installation
+### Prerequisite
+
+[Elixir](http://elixir-lang.org), version __1.0.0__ or later.
+
+## Building
+
+To build project and generate a standalone escript:
 
 ```sh
-$ brew install elixir
+$ mix escript.build
 ```
 
-Then clone the repository.
-
-## Starting
-
-```sh
-$ ./bin/tty2048
-```
-
-Please note that this is still work in progress.
+This creates the `tty2048` executable.
 
 ## License
 
