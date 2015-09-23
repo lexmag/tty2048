@@ -1,36 +1,52 @@
 defmodule Tty2048.Grid do
+  @sides [:up, :down, :right, :left]
+
   def new(size) when size > 0 do
     make_grid(size)
     |> seed |> seed
   end
 
-  def move({direction, grid}) when is_list(grid) do
-    case move(grid, direction) do
-      {^grid, _}     -> {grid, 0}
-      {grid, points} -> {seed(grid), points}
+  def move(grid, side)
+  when is_list(grid) and side in @sides do
+    case try_move(grid, side) do
+      :noop -> {grid, 0}
+      {:ok, grid, points} ->
+        {seed(grid), points}
     end
   end
 
-  defp move(grid, :left) do
+  def has_move?(grid) do
+    Enum.any?(@sides, &(try_move(grid, &1) != :noop))
+  end
+
+  defp try_move(grid, side) do
+    case do_move(grid, side) do
+      {^grid, _} -> :noop
+      {grid, points} ->
+        {:ok, grid, points}
+    end
+  end
+
+  defp do_move(grid, :left) do
     collapse(grid)
     |> compose(&Enum.reverse(&1, &2))
   end
 
-  defp move(grid, :right) do
+  defp do_move(grid, :right) do
     Enum.map(grid, &Enum.reverse/1)
     |> collapse
     |> compose(&(&2 ++ &1))
   end
 
-  defp move(grid, :up) do
+  defp do_move(grid, :up) do
     transpose(grid)
-    |> move(:left)
+    |> do_move(:left)
     |> transpose
   end
 
-  defp move(grid, :down) do
+  defp do_move(grid, :down) do
     transpose(grid)
-    |> move(:right)
+    |> do_move(:right)
     |> transpose
   end
 

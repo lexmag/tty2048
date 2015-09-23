@@ -26,7 +26,7 @@ defmodule Tty2048.Grid.Formatter do
   end
 
   defp format_cell(data, num) do
-    [colorify(num), data]
+    [colorify(num), data, :reset]
   end
 
   defp colorify(num) do

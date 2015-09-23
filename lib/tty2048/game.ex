@@ -19,30 +19,34 @@ defmodule Tty2048.Game do
     GenServer.call(__MODULE__, :peek)
   end
 
-  def move(direction) do
-    GenServer.cast(__MODULE__, {:move, direction})
+  def move(side) do
+    GenServer.cast(__MODULE__, {:move, side})
   end
 
-  def handle_call(:peek, _from, {_, %__MODULE__{}} = state) do
-    {:reply, state, state}
+  def handle_call(:peek, _from, {_, %__MODULE__{}} = game) do
+    {:reply, game, game}
   end
 
-  def handle_cast({:move, direction}, {manager, %__MODULE__{} = game}) do
-    game = move(game, direction)
-    GenEvent.notify(manager, game)
-
-    {:noreply, {manager, game}}
+  def handle_cast({:move, side}, {manager, %__MODULE__{} = game}) do
+    case move(game, side) do
+      {true, game} ->
+        GenEvent.notify(manager, {:moved, game})
+        {:noreply, {manager, game}}
+      {false, game} ->
+        GenEvent.notify(manager, {:game_over, game})
+        {:noreply, {manager, game}}
+    end
   end
 
-  defp new(%__MODULE__{} = state), do: state
+  defp new(%__MODULE__{} = game), do: game
 
   defp new(size) when is_integer(size) do
     %__MODULE__{grid: Grid.new(size)}
   end
 
-  defp move(%{grid: grid, score: score}, direction) do
-    {grid, points} = Grid.move({direction, grid})
-
-    %__MODULE__{grid: grid, score: score + points}
+  defp move(%{grid: grid, score: score}, side) do
+    {grid, points} = Grid.move(grid, side)
+    game = %__MODULE__{grid: grid, score: score + points}
+    {Grid.has_move?(grid), game}
   end
 end

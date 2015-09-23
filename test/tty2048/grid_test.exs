@@ -17,13 +17,13 @@ defmodule Tty2048.GridTest do
     :ok
   end
 
-  test "creation" do
+  test "new/1" do
     assert Grid.new(2) == [[4, 2], [0, 0]]
     assert Grid.new(2) == [[0, 2], [0, 2]]
   end
 
-  test "move left", ctx do
-    assert Grid.move({:left, ctx[:grid]}) == {
+  test "move/2 left side", ctx do
+    assert Grid.move(ctx[:grid], :left) == {
       [[4, 4, 0, 0],
        [4, 8, 0, 0],
        [4, 2, 2, 0],
@@ -31,8 +31,8 @@ defmodule Tty2048.GridTest do
     }
   end
 
-  test "move right", ctx do
-    assert Grid.move({:right, ctx[:grid]}) == {
+  test "move/2 right side", ctx do
+    assert Grid.move(ctx[:grid], :right) == {
       [[0, 0, 4, 4],
        [0, 0, 4, 8],
        [2, 0, 2, 4],
@@ -40,8 +40,8 @@ defmodule Tty2048.GridTest do
     }
   end
 
-  test "move up", ctx do
-    assert Grid.move({:up, ctx[:grid]}) == {
+  test "move/2 up side", ctx do
+    assert Grid.move(ctx[:grid], :up) == {
       [[4, 4, 2, 2],
        [4, 0, 4, 4],
        [0, 0, 2, 4],
@@ -49,8 +49,8 @@ defmodule Tty2048.GridTest do
     }
   end
 
-  test "move down", ctx do
-    assert Grid.move({:down, ctx[:grid]}) == {
+  test "move/2 down side", ctx do
+    assert Grid.move(ctx[:grid], :down) == {
       [[0, 0, 0, 2],
        [0, 0, 2, 2],
        [4, 0, 4, 4],
@@ -58,9 +58,21 @@ defmodule Tty2048.GridTest do
     }
   end
 
-  test "make no move" do
+  test "make/2 no points" do
     grid = [[0, 0], [2, 4]]
 
-    assert Grid.move({:left, grid}) == {grid, 0}
+    assert Grid.move(grid, :left) == {grid, 0}
+  end
+
+  test "has_move?/1" do
+    assert Grid.has_move?([[0, 2]])
+    assert Grid.has_move?([[2, 0]])
+    assert Grid.has_move?([[0], [2]])
+    assert Grid.has_move?([[2], [0]])
+
+    refute Grid.has_move?([[4, 2]])
+    refute Grid.has_move?([[2, 4]])
+    refute Grid.has_move?([[4], [2]])
+    refute Grid.has_move?([[2], [4]])
   end
 end

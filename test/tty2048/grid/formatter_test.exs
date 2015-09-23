@@ -4,7 +4,7 @@ defmodule Tty2048.Grid.FormatterTest do
   import Tty2048.Grid.Formatter
 
   cases = %{
-    [[0]]      => "\e[2m\e[37m   *\e[0m",
+    [[0]]      => "\e[2m\e[37m   *",
     [[2]]      => "\e[32m   2",
     [[4]]      => "\e[33m   4",
     [[8]]      => "\e[36m   8",
@@ -19,12 +19,13 @@ defmodule Tty2048.Grid.FormatterTest do
     [[720]]    => "\e[37m 720",
     [[2500]]   => "\e[37m  2k",
     [[4096]]   => "\e[37m  4k",
-    [[1], [1]] => "\e[37m   1\r\n\e[37m   1"
+    [[1], [5]] => "\e[37m   1\e[0m\r\n\e[37m   5"
   }
 
   for {grid, output} <- cases do
-    test "format #{inspect grid}" do
-      assert IO.iodata_to_binary(format(unquote(grid))) == <<unquote(output), "\r\n">>
+    test "format/1 with #{inspect grid}" do
+      result = format(unquote(grid))
+      assert IO.iodata_to_binary(result) == <<unquote(output), "\e[0m\r\n">>
     end
   end
 end
