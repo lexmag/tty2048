@@ -134,11 +134,11 @@ defmodule Tty2048.Grid do
   end
 
   defp take_empties({row, row_index}, acc) do
-    Stream.with_index(row) |> Enum.reduce acc, fn
+    Stream.with_index(row) |> Enum.reduce(acc, fn
       {0, index}, {count, empties} ->
         {count + 1, [{row_index, index} | empties]}
 
       _cell, acc -> acc
-    end
+    end)
   end
 end

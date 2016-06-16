@@ -5,7 +5,7 @@ defmodule Tty2048.Mixfile do
     [app: :tty2048,
      version: "0.0.1",
      elixir: "~> 1.0",
-     escript: escript]
+     escript: escript()]
   end
 
   def application do
